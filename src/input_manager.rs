@@ -1,79 +1,76 @@
 use std::collections::HashSet;
+use std::sync::{Arc, Mutex};
 use sdl2::event::Event;
-use sdl2::{EventPump, Sdl};
+use sdl2::{EventPump, Sdl, SdlDrop};
 use sdl2::keyboard::Keycode;
+use sdl2::sys::KeyCode;
+use specs::{Entities, Join, System, WriteStorage};
+use specs_derive::Component;
+use specs::prelude::*;
 
-pub(crate) struct InputManager<> {
-    event_pump: EventPump,
-    pressed_keys: HashSet<Keycode>,
-    down_keys: HashSet<Keycode>,
-    up_keys: HashSet<Keycode>,
-    is_quit: bool,
+#[derive(Component, Debug, Clone)]
+#[derive(Default)]
+pub struct InputComponent<> {
+    pub pressed_keys: HashSet<Keycode>,
+    pub down_keys: HashSet<Keycode>,
+    pub up_keys: HashSet<Keycode>,
+    pub is_quit: bool,
 }
 
-impl InputManager<> {
-    pub(crate) fn new(sdl_context:&Sdl) -> Self {
-        InputManager {
-            event_pump: sdl_context.event_pump().unwrap(),
-            pressed_keys: HashSet::new(),
-            down_keys: HashSet::new(),
-            up_keys: HashSet::new(),
-            is_quit: false,
-        }
-    }
 
-    pub(crate) fn update(&mut self) {
-        self.down_keys.clear();
-        self.up_keys.clear();
-
-        for event in self.event_pump.poll_iter() {
-            match event {
-                Event::Quit { .. } => {self.is_quit = true},
-                Event::KeyDown { repeat:false, keycode, .. } => {
-                    if let Some(key) = keycode {
-                        self.pressed_keys.insert(key);
-                        self.up_keys.insert(key);
-                    }
-                },
-                Event::KeyUp {keycode, .. } => {
-                    if let Some(key) = keycode {
-                        self.pressed_keys.remove(&key);
-                        self.down_keys.insert(key);
-                    }
-                },
-                _ => {}
-            }
-        }
-    }
-
+impl InputComponent<> {
     pub(crate) fn get_key(&self, key: Keycode) -> bool {
         self.pressed_keys.contains(&key)
     }
 
-    pub(crate) fn get_key_down(&self, key: Keycode) -> bool {
-        self.down_keys.contains(&key)
+    pub fn get_key_down(&self, key: &str) -> bool {
+        let a = Keycode::from_name(key);
+        match a {
+            None => {false}
+            Some(k) => {self.down_keys.contains(&k)}
+        }
+
     }
 
-    pub(crate) fn get_key_up(&self, key: Keycode) -> bool {
-        self.up_keys.contains(&key)
+    pub fn get_key_up(&self,  key: &str) -> bool {
+        let a = Keycode::from_name(key);
+        match a {
+            None => {false}
+            Some(k) => {self.up_keys.contains(&k)}
+        }
     }
-    pub(crate) fn get_direction(&self) -> (i32, i32) {
-        let mut direction = (0, 0);
-        if self.get_key(Keycode::W) || self.get_key(Keycode::Up){
-            direction.1 += 1;
+    pub fn get_direction(&self) -> [i32; 2] {
+        let mut direction = [0, 0];
+        if self.get_key(Keycode::W) || self.get_key(Keycode::Up) {
+            direction[1] += 1;
         }
-        if self.get_key(Keycode::S) || self.get_key(Keycode::Down){
-            direction.1 -= 1;
+        if self.get_key(Keycode::S) || self.get_key(Keycode::Down) {
+            direction[1] -= 1;
         }
-        if self.get_key(Keycode::D) || self.get_key(Keycode::Right){
-            direction.0 += 1;
+        if self.get_key(Keycode::D) || self.get_key(Keycode::Right) {
+            direction[0] += 1;
         }
-        if self.get_key(Keycode::A) || self.get_key(Keycode::Left){
-            direction.0 -= 1;
+        if self.get_key(Keycode::A) || self.get_key(Keycode::Left) {
+            direction[0] -= 1;
         }
         direction
     }
-    pub(crate) fn is_exit(&self, ) -> bool {
+    pub fn is_exit(&self) -> bool {
         self.is_quit
     }
 }
+
+// pub struct InputManager{
+// }
+//
+// impl<'a> System<'a> for InputManager {
+//     type SystemData = (Entities<'a>, WriteStorage<'a, InputComponent>,  Option<Read<'a, EventPump>>,);
+//
+//     fn run(&mut self, mut data: Self::SystemData) {
+//         // for (ent, inp) in (&*data.0, &mut data.1, ).join() {
+//         //     inp.down_keys.clear();
+//         //     inp.up_keys.clear();
+//
+//
+//         }
+//     }
