@@ -1,38 +1,49 @@
-use std::cell::RefCell;
-use std::rc::Rc;
-use std::sync::{Arc, Mutex, RwLock};
 use specs::prelude::*;
 use specs_derive::Component;
-use sdl2::rect::{Point, Rect};
-#[derive(Component, Debug, Clone,)]
+use serde::Serialize;
+use serde_derive::Deserialize;
+
+#[derive(Component, Debug, Clone, Hash)]
+#[derive(Serialize, Deserialize)]
 #[storage(VecStorage)]
 pub struct Position{
     pub x: i32,
     pub y: i32,
 }
 
-#[derive(Component, Debug)]
+#[derive(Component, Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize)]
 #[storage(VecStorage)]
-pub struct Velocity {
+pub struct Collider {
     pub x: i32,
     pub y: i32,
+    pub is_collision:bool,
+    pub collision_start:bool,
+    pub collision_end:bool,
 }
+
 #[derive(Component, Debug)]
+#[derive(Serialize, Deserialize)]
 #[storage(VecStorage)]
 pub struct Sprite {
     pub spritesheet: usize,
-    pub region: Rect,
+    pub x: i32,
+    pub y: i32,
+    pub h: u32,
+    pub w: u32,
 }
 
 #[derive(Component, Debug)]
-#[storage(VecStorage)]
-pub struct Move {
-    pub direct:Point,
-    pub speed:i32,
-}
-
-#[derive(Component, Debug)]
+#[derive(Serialize, Deserialize)]
 #[storage(VecStorage)]
 pub struct Script {
     pub code:String,
+    pub buffer:[i32;8]
+}
+
+#[derive(Component, Debug)]
+#[storage(VecStorage)]
+#[derive(Default)]
+pub struct Statik {
+    pub buffer:[i32;8]
 }
