@@ -4,6 +4,7 @@ use sdl2::pixels::Color;
 use sdl2::render::{WindowCanvas, Texture};
 
 use crate::components::*;
+
 pub type SystemData<'a> = (
     ReadStorage<'a, Position>,
     ReadStorage<'a, Sprite>,
@@ -21,10 +22,9 @@ pub fn render(
     let (width, height) = canvas.output_size()?;
 
     for (pos, sprite) in (&data.0, &data.1).join() {
-        let current_frame = sprite.region;
         let screen_position = Point::new(pos.x, -pos.y) + Point::new(width as i32 / 2, height as i32 / 2);
-        let screen_rect = Rect::from_center(screen_position, current_frame.width(), current_frame.height());
-        canvas.copy(&textures[sprite.spritesheet], current_frame, screen_rect)?;
+        let screen_rect = Rect::from_center(screen_position, sprite.w, sprite.h);
+        canvas.copy(&textures[sprite.spritesheet], Rect::new(sprite.x, sprite.y, sprite.h, sprite.w), screen_rect)?;
     }
     canvas.present();
     Ok(())
