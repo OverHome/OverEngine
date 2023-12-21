@@ -1,0 +1,107 @@
+[
+  {
+    "position": {
+      "x": 400,
+      "y": 0
+    },
+    "sprite": {
+      "spritesheet": 0,
+      "x": 400,
+      "y": 0,
+      "w": 20,
+      "h": 100
+    },
+    "script": {
+      "code": "assets/scripts/player2.rhai"
+    },
+    "collider": {
+      "size": {
+        "x": 20,
+        "y": 100
+      }
+    }
+  },
+  {
+    "position": {
+      "x": -400,
+      "y": 0
+    },
+    "sprite": {
+      "spritesheet": 0,
+      "x": 400,
+      "y": 0,
+      "w": 20,
+      "h": 100
+    },
+    "script": {
+      "code": "assets/scripts/player1.rhai"
+    },
+    "collider": {
+      "size": {
+        "x": 20,
+        "y": 100
+      }
+    }
+  },
+  {
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "sprite": {
+      "spritesheet": 1,
+      "x": 0,
+      "y": 0,
+      "w": 25,
+      "h": 25
+    },
+    "script": {
+      "code": "assets/scripts/ball.rhai"
+    },
+    "collider": {
+      "size": {
+        "x": 25,
+        "y": 25
+      }
+    }
+  },
+  {
+    "position": {
+      "x": 0,
+      "y": 300
+    },
+    "sprite": {
+      "spritesheet": 0,
+      "x": 400,
+      "y": 0,
+      "w": 760,
+      "h": 20
+    },
+    "collider": {
+      "size": {
+        "x": 760,
+        "y": 20
+      }
+    }
+  },
+  {
+    "position": {
+      "x": 0,
+      "y": -300
+    },
+    "sprite": {
+      "spritesheet": 0,
+      "x": 400,
+      "y": 0,
+      "w": 760,
+      "h": 20
+    },
+    "collider": {
+      "size": {
+        "x": 760,
+        "y": 20
+      }
+    }
+  }
+
+]
